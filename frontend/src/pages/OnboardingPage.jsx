@@ -14,7 +14,7 @@ const OnboardingPage = () => {
     fullName: authUser?.fullName || "",
     bio: authUser?.bio || "",
     nativeLanguage: authUser?.nativeLanguage || "",
-    learningLanguage: authUser?.learningLanguage || "",
+    // learningLanguage: authUser?.learningLanguage || "",
     location: authUser?.location || "",
     profilePic: authUser?.profilePic || "",
   });
@@ -130,7 +130,7 @@ const OnboardingPage = () => {
               </div>
 
               {/* LEARNING LANGUAGE */}
-              <div className="form-control">
+              {/* <div className="form-control">
                 <label className="label">
                   <span className="label-text">Learning Language</span>
                 </label>
@@ -147,7 +147,7 @@ const OnboardingPage = () => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
             </div>
 
             {/* LOCATION */}

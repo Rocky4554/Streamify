@@ -4,7 +4,8 @@ import { Toaster } from "react-hot-toast";
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import Layout from "./components/Layout.jsx";
-import { useThemeStore } from "./store/useThemeStore.js";
+import { useSelector } from "react-redux";
+import { selectTheme } from "./store/themeSlice";
 
 // Lazy load page components
 const HomePage = lazy(() => import("./pages/HomePage.jsx"));
@@ -14,10 +15,11 @@ const NotificationsPage = lazy(() => import("./pages/NotificationsPage.jsx"));
 const CallPage = lazy(() => import("./pages/CallPage.jsx"));
 const ChatPage = lazy(() => import("./pages/ChatPage.jsx"));
 const OnboardingPage = lazy(() => import("./pages/OnboardingPage.jsx"));
+const Friends = lazy(() => import("./pages/friends.jsx"));
 
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
-  const { theme } = useThemeStore();
+  const theme = useSelector(selectTheme);
 
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.isOnboarded;
@@ -34,6 +36,18 @@ const App = () => {
               isAuthenticated && isOnboarded ? (
                 <Layout showSidebar={true}>
                   <HomePage />
+                </Layout>
+              ) : (
+                <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+              )
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              isAuthenticated && isOnboarded ? (
+                <Layout showSidebar={true}>
+                  <Friends />
                 </Layout>
               ) : (
                 <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />

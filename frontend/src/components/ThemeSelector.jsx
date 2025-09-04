@@ -1,9 +1,11 @@
 import { PaletteIcon } from "lucide-react";
-import { useThemeStore } from "../store/useThemeStore";
+import { useSelector, useDispatch } from "react-redux";
+import { selectTheme, setTheme } from "../store/themeSlice";
 import { THEMES } from "../constants";
 
 const ThemeSelector = () => {
-  const { theme, setTheme } = useThemeStore();
+  const theme = useSelector(selectTheme);
+  const dispatch = useDispatch();
 
   return (
     <div className="dropdown dropdown-end">
@@ -29,7 +31,7 @@ const ThemeSelector = () => {
                   : "hover:bg-base-content/5"
               }
             `}
-              onClick={() => setTheme(themeOption.name)}
+              onClick={() => dispatch(setTheme(themeOption.name))}
             >
               <PaletteIcon className="size-4" />
               <span className="text-sm font-medium">{themeOption.label}</span>
