@@ -6,6 +6,7 @@ import useAuthUser from "./hooks/useAuthUser.js";
 import Layout from "./components/Layout.jsx";
 import { useSelector } from "react-redux";
 import { selectTheme } from "./store/themeSlice";
+import { Link } from 'react-router';
 
 // Lazy load page components
 const HomePage = lazy(() => import("./pages/HomePage.jsx"));
