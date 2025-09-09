@@ -1,54 +1,8 @@
-import express from "express";
-import "dotenv/config";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import path from "path";
-
-import authRoutes from "./routes/auth.route.js";
-import userRoutes from "./routes/user.route.js";
-import chatRoutes from "./routes/chat.route.js";
-
-import { connectDB } from "./lib/db.js";
-
-const app = express();
-const PORT = process.env.PORT;
-
-const __dirname = path.resolve();
-
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true, // allow frontend to send cookies
-  })
-);
-
-app.use(express.json());
-app.use(cookieParser());
-
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/chat", chatRoutes);
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  connectDB();
-});
-
-/////////////////
-// for deployement on vercel
-
-//import express from "express";
+// import express from "express";
 // import "dotenv/config";
 // import cookieParser from "cookie-parser";
 // import cors from "cors";
+// import path from "path";
 
 // import authRoutes from "./routes/auth.route.js";
 // import userRoutes from "./routes/user.route.js";
@@ -57,17 +11,14 @@ app.listen(PORT, () => {
 // import { connectDB } from "./lib/db.js";
 
 // const app = express();
+// const PORT = process.env.PORT;
 
-// // Connect to database
-// connectDB();
+// const __dirname = path.resolve();
 
 // app.use(
 //   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       process.env.FRONTEND_URL || "https://your-app.vercel.app"
-//     ],
-//     credentials: true,
+//     origin: "http://localhost:5173",
+//     credentials: true, // allow frontend to send cookies
 //   })
 // );
 
@@ -78,14 +29,63 @@ app.listen(PORT, () => {
 // app.use("/api/users", userRoutes);
 // app.use("/api/chat", chatRoutes);
 
-// // For local development only
-// if (process.env.NODE_ENV !== "production") {
-//   const PORT = process.env.PORT || 3000;
-//   app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
 //   });
 // }
 
-// // Export for Vercel
-// export default app;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+//   connectDB();
+// });
+
+/////////////////
+// for deployement on vercel
+
+import express from "express";
+import "dotenv/config";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+
+import authRoutes from "./routes/auth.route.js";
+import userRoutes from "./routes/user.route.js";
+import chatRoutes from "./routes/chat.route.js";
+
+import { connectDB } from "./lib/db.js";
+
+const app = express();
+
+// Connect to database
+connectDB();
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      process.env.FRONTEND_URL || "https://your-app.vercel.app"
+    ],
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+app.use(cookieParser());
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/chat", chatRoutes);
+
+// For local development only
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel
+export default app;
 
