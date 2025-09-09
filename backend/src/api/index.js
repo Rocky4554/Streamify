@@ -44,28 +44,25 @@
 
 /////////////////
 // for deployement on vercel
-
 import express from "express";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import authRoutes from "./routes/auth.route.js";
-import userRoutes from "./routes/user.route.js";
-import chatRoutes from "./routes/chat.route.js";
+import authRoutes from "../routes/auth.route.js";
+import userRoutes from "../routes/user.route.js";
+import chatRoutes from "../routes/chat.route.js";
 
-import { connectDB } from "./lib/db.js";
+import { connectDB } from "../lib/db.js";
 
 const app = express();
 
-// Connect to database
-connectDB();
-
+// Middleware
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      process.env.FRONTEND_URL || "https://your-app.vercel.app"
+      process.env.FRONTEND_URL, // set this in Vercel env
     ],
     credentials: true,
   })
@@ -74,18 +71,29 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/chat", chatRoutes);
+// Routes
+app.use("/api/auth", async (req, res, next) => {
+  await connectDB();
+  next();
+}, authRoutes);
 
-// For local development only
+app.use("/api/users", async (req, res, next) => {
+  await connectDB();
+  next();
+}, userRoutes);
+
+app.use("/api/chat", async (req, res, next) => {
+  await connectDB();
+  next();
+}, chatRoutes);
+
+// Local development only
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
   });
 }
 
-// Export for Vercel
+// Export for Vercel (serverless)
 export default app;
-
