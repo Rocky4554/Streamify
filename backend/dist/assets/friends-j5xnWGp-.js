@@ -1,4 +1,4 @@
-import{c as m,r as x,p as h,a as g,j as e,U as l,D as p}from"./index-CF7AcY0E.js";import{F as u}from"./FriendCard-k2YlYq-8.js";/**
+import{c as m,r as x,p as h,a as g,j as e,U as l,D as p}from"./index-DxtlJbeM.js";import{F as u}from"./FriendCard-De39Hm4c.js";/**
  * @license lucide-react v0.503.0 - ISC
  *
  * This source code is licensed under the ISC license.
