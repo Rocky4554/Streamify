@@ -72,6 +72,11 @@ app.get("/api/debug", (req, res) => {
   res.json({ message: "API is alive" });
 });
 
+// Test route at root level
+app.get("/", (req, res) => {
+  res.json({ message: "Connectify API is running!", timestamp: new Date().toISOString() });
+});
+
 // Serve static files in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("dist"));
