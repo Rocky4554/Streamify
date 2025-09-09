@@ -52,48 +52,28 @@ import cors from "cors";
 import authRoutes from "../routes/auth.route.js";
 import userRoutes from "../routes/user.route.js";
 import chatRoutes from "../routes/chat.route.js";
-
 import { connectDB } from "../lib/db.js";
 
 const app = express();
 
-// Middleware
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      process.env.FRONTEND_URL, // set this in Vercel env
-    ],
-    credentials: true,
-  })
-);
-
+// middleware
+app.use(cors({
+  origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes
-app.use("/api/auth", async (req, res, next) => {
-  await connectDB();
-  next();
-}, authRoutes);
+// routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/chat", chatRoutes);
+app.get("/api/debug", (req, res) => {
+  res.json({ message: "API is alive" });
+});
 
-app.use("/api/users", async (req, res, next) => {
-  await connectDB();
-  next();
-}, userRoutes);
 
-app.use("/api/chat", async (req, res, next) => {
-  await connectDB();
-  next();
-}, chatRoutes);
+// ensure DB connection
+connectDB();
 
-// Local development only
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  });
-}
-
-// Export for Vercel (serverless)
-export default app;
+export default app; // Vercel requires default export
